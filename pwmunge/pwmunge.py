@@ -1,6 +1,7 @@
 import sys
 
-suffices = ['!', '1', '123', '2015', '0915', '915', '1015', 'oct15', 'fall15', 'fall2015']
+suffices = ['!', '1', '123', '2015', '2015!', '0915', '915', '1015', 'oct15', 'fall15', 'fall2015']
+# suffices = []
 
 def toggle_case(c):
     if c.islower():
@@ -31,7 +32,8 @@ def transmute(beginstr, array, index, suffices, min, max):
     
 def build_array(str):
     ret = list()
-    for c in str:
+    for i in range(0, len(str)):
+        c = str[i]
         if c in 'aA':               # [aA] -> @
             ret.append([c, '@'])
         elif c in 'eE':             # [eE] -> 3
@@ -47,7 +49,8 @@ def build_array(str):
         else:
             ret.append([c])
 
-        ret[0].append(toggle_case(ret[0][0]))
+        if i == 0:
+            ret[0].append(toggle_case(ret[0][0]))
 
     return ret
 
@@ -63,4 +66,5 @@ if len(sys.argv) > 2:
     min = int(sys.argv[2])
     max = int(sys.argv[3])
 
+# print build_array(base)
 transmute('', build_array(base), 0, suffices, min, max)
