@@ -1,3 +1,6 @@
+# http://baileysoriginalirishtech.blogspot.com/2015/10/pumpkin-spiced-password-
+# generator.html
+
 import sys
 
 # suffices = ['!', '1', '123', '2015', '2015!', '0915', '915', '1015', 'oct15', 'fall15', 'fall2015']
