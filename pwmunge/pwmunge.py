@@ -1,7 +1,7 @@
 import sys
 
-suffices = ['!', '1', '123', '2015', '2015!', '0915', '915', '1015', 'oct15', 'fall15', 'fall2015']
-# suffices = []
+# suffices = ['!', '1', '123', '2015', '2015!', '0915', '915', '1015', 'oct15', 'fall15', 'fall2015']
+suffices = []
 
 def toggle_case(c):
     if c.islower():
@@ -60,8 +60,8 @@ if len(sys.argv) != 2 and len(sys.argv) != 4:
 
 base = sys.argv[1]
 
-min = 0
-max = 26
+min = 7
+max = 14
 if len(sys.argv) > 2:
     min = int(sys.argv[2])
     max = int(sys.argv[3])
