@@ -7,7 +7,9 @@ CMDLOG
 
 1.0 Overview
 ================================================================================
-Command and output logger for red team use. 32-bit only.
+Command and output logger for red team use. 32-bit only. For details, see:
+	http://baileysoriginalirishtech.blogspot.com/2016/02/snooping-on-myself-for
+	-change.html
 
 2.0 Build and Test
 ================================================================================
