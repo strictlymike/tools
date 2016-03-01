@@ -30,30 +30,6 @@ enum CmdLogState {
 
 static void LogToFile(FILE *out, char *fmt, ...);
 void LogAdapterInfoToFile(FILE *out);
-BOOL (__stdcall * pCreateProcessA)(
-	LPCSTR a0,
-	LPSTR a1,
-	LPSECURITY_ATTRIBUTES a2,
-	LPSECURITY_ATTRIBUTES a3,
-	BOOL a4,
-	DWORD a5,
-	LPVOID a6,
-	LPCSTR a7,
-	LPSTARTUPINFOA a8,
-	LPPROCESS_INFORMATION a9
-) = CreateProcessA;
-BOOL (__stdcall * pCreateProcessW)(
-	LPCWSTR a0,
-	LPWSTR a1,
-	LPSECURITY_ATTRIBUTES a2,
-	LPSECURITY_ATTRIBUTES a3,
-	BOOL a4,
-	DWORD a5,
-	LPVOID a6,
-	LPCWSTR a7,
-	LPSTARTUPINFOW a8,
-	LPPROCESS_INFORMATION a9
-) = CreateProcessW;
 void LogInfoStampToFile(FILE *out);
 void LogTimeStampToFile(FILE *out);
 BOOL WINAPI LogReadConsoleW(
@@ -74,6 +50,7 @@ BOOL WINAPI LogWriteConsoleW(
 ///////////////////////////////////////////////////////////////////////////////
 // Data
 ///////////////////////////////////////////////////////////////////////////////
+
 enum CmdLogState State = clsLabel;
 FILE *cmdlog = NULL;
 char *cmdlog_fname_fmt = "%%USERPROFILE%%\\cmdlog-%04d.%02d.%02dT%02d.%02d.%02d.%02d-UTC-%1.1f.log";
@@ -82,6 +59,32 @@ char cmdlog_fname_expanded[MAX_PATH];
 static CHAR dllname[MAX_PATH];
 static CHAR exename[MAX_PATH];
 
+BOOL (__stdcall * pCreateProcessA)(
+	LPCSTR a0,
+	LPSTR a1,
+	LPSECURITY_ATTRIBUTES a2,
+	LPSECURITY_ATTRIBUTES a3,
+	BOOL a4,
+	DWORD a5,
+	LPVOID a6,
+	LPCSTR a7,
+	LPSTARTUPINFOA a8,
+	LPPROCESS_INFORMATION a9
+) = CreateProcessA;
+
+BOOL (__stdcall * pCreateProcessW)(
+	LPCWSTR a0,
+	LPWSTR a1,
+	LPSECURITY_ATTRIBUTES a2,
+	LPSECURITY_ATTRIBUTES a3,
+	BOOL a4,
+	DWORD a5,
+	LPVOID a6,
+	LPCWSTR a7,
+	LPSTARTUPINFOW a8,
+	LPPROCESS_INFORMATION a9
+) = CreateProcessW;
+
 static BOOL (WINAPI *pReadConsoleW)(
 	HANDLE  hConsoleInput,
 	LPVOID  lpBuffer,
@@ -89,6 +92,7 @@ static BOOL (WINAPI *pReadConsoleW)(
 	LPDWORD lpNumberOfCharsRead,
 	PCONSOLE_READCONSOLE_CONTROL pInputControl
 ) = ReadConsoleW;
+
 static BOOL (WINAPI *pWriteConsoleW)(
 	HANDLE  hConsoleOutput,
 	const VOID    *lpBuffer,
@@ -116,16 +120,17 @@ BOOL __stdcall HookCreateProcessA(LPCSTR lpApplicationName,
 {
 	LogInfoStampToFile(cmdlog);
     LogToFile(cmdlog, "CreateProcessA(%hs,%hs,%p,%p,%p,%p,%p,%hs,%p,%p)\n",
-                lpApplicationName,
-                lpCommandLine,
-                lpProcessAttributes,
-                lpThreadAttributes,
-                bInheritHandles,
-                dwCreationFlags,
-                lpEnvironment,
-                lpCurrentDirectory,
-                lpStartupInfo,
-                lpProcessInformation);
+		lpApplicationName,
+		lpCommandLine,
+		lpProcessAttributes,
+		lpThreadAttributes,
+		bInheritHandles,
+		dwCreationFlags,
+		lpEnvironment,
+		lpCurrentDirectory,
+		lpStartupInfo,
+		lpProcessInformation
+	   );
 
     PROCESS_INFORMATION procInfo;
     if (lpProcessInformation == NULL) {
@@ -136,17 +141,18 @@ BOOL __stdcall HookCreateProcessA(LPCSTR lpApplicationName,
     BOOL rv = 0;
     __try {
         rv = DetourCreateProcessWithDllA(lpApplicationName,
-                                         lpCommandLine,
-                                         lpProcessAttributes,
-                                         lpThreadAttributes,
-                                         bInheritHandles,
-                                         dwCreationFlags,
-                                         lpEnvironment,
-                                         lpCurrentDirectory,
-                                         lpStartupInfo,
-                                         lpProcessInformation,
-                                         dllname,
-                                         pCreateProcessA);
+			lpCommandLine,
+			lpProcessAttributes,
+			lpThreadAttributes,
+			bInheritHandles,
+			dwCreationFlags,
+			lpEnvironment,
+			lpCurrentDirectory,
+			lpStartupInfo,
+			lpProcessInformation,
+			dllname,
+			pCreateProcessA
+		   );
     } __finally { };
     return rv;
 }
@@ -166,16 +172,17 @@ BOOL __stdcall HookCreateProcessW(LPCWSTR lpApplicationName,
 {
 	LogInfoStampToFile(cmdlog);
     LogToFile(cmdlog, "CreateProcessW(%ls,%ls,%p,%p,%p,%p,%p,%ls,%p,%p)\n",
-                lpApplicationName,
-                lpCommandLine,
-                lpProcessAttributes,
-                lpThreadAttributes,
-                bInheritHandles,
-                dwCreationFlags,
-                lpEnvironment,
-                lpCurrentDirectory,
-                lpStartupInfo,
-                lpProcessInformation);
+		lpApplicationName,
+		lpCommandLine,
+		lpProcessAttributes,
+		lpThreadAttributes,
+		bInheritHandles,
+		dwCreationFlags,
+		lpEnvironment,
+		lpCurrentDirectory,
+		lpStartupInfo,
+		lpProcessInformation
+	   );
 
     PROCESS_INFORMATION procInfo;
     if (lpProcessInformation == NULL) {
@@ -186,17 +193,18 @@ BOOL __stdcall HookCreateProcessW(LPCWSTR lpApplicationName,
     BOOL rv = 0;
     __try {
         rv = DetourCreateProcessWithDllW(lpApplicationName,
-                                         lpCommandLine,
-                                         lpProcessAttributes,
-                                         lpThreadAttributes,
-                                         bInheritHandles,
-                                         dwCreationFlags,
-                                         lpEnvironment,
-                                         lpCurrentDirectory,
-                                         lpStartupInfo,
-                                         lpProcessInformation,
-                                         dllname,
-                                         pCreateProcessW);
+			lpCommandLine,
+			lpProcessAttributes,
+			lpThreadAttributes,
+			bInheritHandles,
+			dwCreationFlags,
+			lpEnvironment,
+			lpCurrentDirectory,
+			lpStartupInfo,
+			lpProcessInformation,
+			dllname,
+			pCreateProcessW
+		   );
     } __finally { };
     return rv;
 }
