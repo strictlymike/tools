@@ -33,18 +33,18 @@ void LogAdapterInfoToFile(FILE *out);
 void LogInfoStampToFile(FILE *out);
 void LogTimeStampToFile(FILE *out);
 BOOL WINAPI LogReadConsoleW(
-  HANDLE  hConsoleInput,
-  LPVOID  lpBuffer,
-  DWORD   nNumberOfCharsToRead,
-  LPDWORD lpNumberOfCharsRead,
-  PCONSOLE_READCONSOLE_CONTROL pInputControl
+	HANDLE hConsoleInput,
+	LPVOID lpBuffer,
+	DWORD nNumberOfCharsToRead,
+	LPDWORD lpNumberOfCharsRead,
+	PCONSOLE_READCONSOLE_CONTROL pInputControl
 );
 BOOL WINAPI LogWriteConsoleW(
-  HANDLE  hConsoleOutput,
-  const VOID    *lpBuffer,
-  DWORD   nNumberOfCharsToWrite,
-  LPDWORD lpNumberOfCharsWritten,
-  LPVOID  lpReserved
+	HANDLE hConsoleOutput,
+	const VOID *lpBuffer,
+	DWORD nNumberOfCharsToWrite,
+	LPDWORD lpNumberOfCharsWritten,
+	LPVOID lpReserved
 );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -86,19 +86,19 @@ BOOL (__stdcall * pCreateProcessW)(
 ) = CreateProcessW;
 
 static BOOL (WINAPI *pReadConsoleW)(
-	HANDLE  hConsoleInput,
-	LPVOID  lpBuffer,
-	DWORD   nNumberOfCharsToRead,
+	HANDLE hConsoleInput,
+	LPVOID lpBuffer,
+	DWORD nNumberOfCharsToRead,
 	LPDWORD lpNumberOfCharsRead,
 	PCONSOLE_READCONSOLE_CONTROL pInputControl
 ) = ReadConsoleW;
 
 static BOOL (WINAPI *pWriteConsoleW)(
-	HANDLE  hConsoleOutput,
-	const VOID    *lpBuffer,
-	DWORD   nNumberOfCharsToWrite,
+	HANDLE hConsoleOutput,
+	const VOID *lpBuffer,
+	DWORD nNumberOfCharsToWrite,
 	LPDWORD lpNumberOfCharsWritten,
-	LPVOID  lpReserved
+	LPVOID lpReserved
 ) = WriteConsoleW;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -119,7 +119,7 @@ BOOL __stdcall HookCreateProcessA(LPCSTR lpApplicationName,
    )
 {
 	LogInfoStampToFile(cmdlog);
-    LogToFile(cmdlog, "CreateProcessA(%hs,%hs,%p,%p,%p,%p,%p,%hs,%p,%p)\n",
+	LogToFile(cmdlog, "CreateProcessA(%hs,%hs,%p,%p,%p,%p,%p,%hs,%p,%p)\n",
 		lpApplicationName,
 		lpCommandLine,
 		lpProcessAttributes,
@@ -132,15 +132,15 @@ BOOL __stdcall HookCreateProcessA(LPCSTR lpApplicationName,
 		lpProcessInformation
 	   );
 
-    PROCESS_INFORMATION procInfo;
-    if (lpProcessInformation == NULL) {
-        lpProcessInformation= &procInfo;
-        ZeroMemory(&procInfo, sizeof(procInfo));
-    }
+	PROCESS_INFORMATION procInfo;
+	if (lpProcessInformation == NULL) {
+		lpProcessInformation= &procInfo;
+		ZeroMemory(&procInfo, sizeof(procInfo));
+	}
 
-    BOOL rv = 0;
-    __try {
-        rv = DetourCreateProcessWithDllA(lpApplicationName,
+	BOOL rv = 0;
+	__try {
+		rv = DetourCreateProcessWithDllA(lpApplicationName,
 			lpCommandLine,
 			lpProcessAttributes,
 			lpThreadAttributes,
@@ -153,8 +153,8 @@ BOOL __stdcall HookCreateProcessA(LPCSTR lpApplicationName,
 			dllname,
 			pCreateProcessA
 		   );
-    } __finally { };
-    return rv;
+	} __finally { };
+	return rv;
 }
 
 /* Adapted from Detours sample traceapi.cpp */
@@ -171,7 +171,7 @@ BOOL __stdcall HookCreateProcessW(LPCWSTR lpApplicationName,
    )
 {
 	LogInfoStampToFile(cmdlog);
-    LogToFile(cmdlog, "CreateProcessW(%ls,%ls,%p,%p,%p,%p,%p,%ls,%p,%p)\n",
+	LogToFile(cmdlog, "CreateProcessW(%ls,%ls,%p,%p,%p,%p,%p,%ls,%p,%p)\n",
 		lpApplicationName,
 		lpCommandLine,
 		lpProcessAttributes,
@@ -184,15 +184,15 @@ BOOL __stdcall HookCreateProcessW(LPCWSTR lpApplicationName,
 		lpProcessInformation
 	   );
 
-    PROCESS_INFORMATION procInfo;
-    if (lpProcessInformation == NULL) {
-        lpProcessInformation= &procInfo;
-        ZeroMemory(&procInfo, sizeof(procInfo));
-    }
+	PROCESS_INFORMATION procInfo;
+	if (lpProcessInformation == NULL) {
+		lpProcessInformation= &procInfo;
+		ZeroMemory(&procInfo, sizeof(procInfo));
+	}
 
-    BOOL rv = 0;
-    __try {
-        rv = DetourCreateProcessWithDllW(lpApplicationName,
+	BOOL rv = 0;
+	__try {
+		rv = DetourCreateProcessWithDllW(lpApplicationName,
 			lpCommandLine,
 			lpProcessAttributes,
 			lpThreadAttributes,
@@ -205,17 +205,17 @@ BOOL __stdcall HookCreateProcessW(LPCWSTR lpApplicationName,
 			dllname,
 			pCreateProcessW
 		   );
-    } __finally { };
-    return rv;
+	} __finally { };
+	return rv;
 }
 
 BOOL WINAPI
 LogReadConsoleW(
-  HANDLE  hConsoleInput,
-  LPVOID  lpBuffer,
-  DWORD   nNumberOfCharsToRead,
-  LPDWORD lpNumberOfCharsRead,
-  PCONSOLE_READCONSOLE_CONTROL pInputControl
+	HANDLE hConsoleInput,
+	LPVOID lpBuffer,
+	DWORD nNumberOfCharsToRead,
+	LPDWORD lpNumberOfCharsRead,
+	PCONSOLE_READCONSOLE_CONTROL pInputControl
 )
 {
 	BOOL ret = pReadConsoleW(
@@ -282,11 +282,11 @@ LogInfoStampToFile(FILE *out)
 
 BOOL WINAPI
 LogWriteConsoleW(
-  HANDLE  hConsoleOutput,
-  const VOID    *lpBuffer,
-  DWORD   nNumberOfCharsToWrite,
-  LPDWORD lpNumberOfCharsWritten,
-  LPVOID  lpReserved
+	HANDLE  hConsoleOutput,
+	const VOID *lpBuffer,
+	DWORD nNumberOfCharsToWrite,
+	LPDWORD lpNumberOfCharsWritten,
+	LPVOID lpReserved
 )
 {
 	if (clsLabel == State) {
@@ -376,12 +376,12 @@ exit_LogAdapterInfo:
 
 BOOL WINAPI DllMain(HINSTANCE hinst, DWORD dwReason, LPVOID reserved)
 {
-    LONG error;
-    (void)hinst;
-    (void)reserved;
+	LONG error;
+	(void)hinst;
+	(void)reserved;
 
-    if (dwReason == DLL_PROCESS_ATTACH) {
-        DetourRestoreAfterWith();
+	if (dwReason == DLL_PROCESS_ATTACH) {
+		DetourRestoreAfterWith();
 
 		printf("Attaching logging hooks...\n");
 
@@ -429,15 +429,15 @@ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD dwReason, LPVOID reserved)
 			}
 		}
 
-        DetourTransactionBegin();
-        DetourUpdateThread(GetCurrentThread());
-        DetourAttach(&(PVOID&)pReadConsoleW, LogReadConsoleW);
-        DetourAttach(&(PVOID&)pWriteConsoleW, LogWriteConsoleW);
-        DetourAttach(&(PVOID&)pCreateProcessA, HookCreateProcessA);
-        DetourAttach(&(PVOID&)pCreateProcessW, HookCreateProcessW);
-        error = DetourTransactionCommit();
+		DetourTransactionBegin();
+		DetourUpdateThread(GetCurrentThread());
+		DetourAttach(&(PVOID&)pReadConsoleW, LogReadConsoleW);
+		DetourAttach(&(PVOID&)pWriteConsoleW, LogWriteConsoleW);
+		DetourAttach(&(PVOID&)pCreateProcessA, HookCreateProcessA);
+		DetourAttach(&(PVOID&)pCreateProcessW, HookCreateProcessW);
+		error = DetourTransactionCommit();
 
-        if (error == NO_ERROR) {
+		if (error == NO_ERROR) {
 			Ret = GetModuleFileNameA(hinst, dllname, ARRAYSIZE(dllname));
 			if (Ret == 0) {
 				LogToFile(
@@ -462,21 +462,21 @@ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD dwReason, LPVOID reserved)
 				cmdlog,
 				"Detoured {Read,Write}ConsoleW() and CreateProcess[AW]"
 			   );
-        }
-        else {
-            LogToFile(
+		}
+		else {
+			LogToFile(
 				cmdlog,
 				"Error detouring {Read,Write}ConsoleW(): %d\n",
 				error
 			   );
-        }
-    }
-    else if (dwReason == DLL_PROCESS_DETACH) {
-        DetourTransactionBegin();
-        DetourUpdateThread(GetCurrentThread());
-        DetourDetach(&(PVOID&)pReadConsoleW, LogReadConsoleW);
-        DetourDetach(&(PVOID&)pWriteConsoleW, LogWriteConsoleW);
-        error = DetourTransactionCommit();
-    }
-    return TRUE;
+		}
+	}
+	else if (dwReason == DLL_PROCESS_DETACH) {
+		DetourTransactionBegin();
+		DetourUpdateThread(GetCurrentThread());
+		DetourDetach(&(PVOID&)pReadConsoleW, LogReadConsoleW);
+		DetourDetach(&(PVOID&)pWriteConsoleW, LogWriteConsoleW);
+		error = DetourTransactionCommit();
+	}
+	return TRUE;
 }
